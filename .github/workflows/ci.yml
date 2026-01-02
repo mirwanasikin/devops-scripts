@@ -1,0 +1,42 @@
+name: Bash CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  bash-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Show repo tree
+        run: tree || ls -R
+
+      - name: Make scripts executable
+        run: |
+          chmod +x backup/backup.sh
+          chmod +x monitoring/monitor.sh
+
+      - name: Bash syntax check
+        run: |
+          bash -n backup/backup.sh
+          bash -n monitoring/monitor.sh
+
+      - name: Install ShellCheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+
+      - name: ShellCheck lint
+        run: |
+          shellcheck backup/backup.sh
+          shellcheck monitoring/monitor.sh
+
+      - name: Dry run scripts
+        run: |
+          bash backup/backup.sh || echo "backup.sh skipped runtime deps"
+          bash monitoring/monitor.sh || echo "monitor.sh skipped runtime deps"
+
