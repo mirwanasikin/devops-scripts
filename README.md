@@ -1,4 +1,4 @@
-# DevOps Scripts
+# Backup & Monitoring Scripts
 
 Collection of production-ready bash scripts for system administration, automation, and monitoring tasks.
 
